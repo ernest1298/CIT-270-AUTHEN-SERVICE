@@ -23,13 +23,10 @@ const redisClient = createClient(
 app.use(bodyparser.json());//use the middleware (call it before anything else happen on this request)
 
 
-app.listen(port, ()=>{
-    console.log("Listening on port: "+port);
 
-})
 
 const validatePassword = async (request, response)=>{
-    //await redisClient.connect();
+    await redisClient.connect();
     const requestHashedPassword = md5(request.body.password);
     const redisHashedPassword= await redisClient.hmGet('Password',resquest.body.userName);
     const loginRequest = request.body;
