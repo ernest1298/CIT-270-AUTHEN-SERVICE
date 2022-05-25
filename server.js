@@ -41,8 +41,24 @@ const validatePassword = async (request, response)=>{
     }
 
 }
+const savePassword = async (request, response)=>{
+    const clearTextPassword = request.body.password;
+    const hashedTextPassword = md5(clearTextPassword);
+    await redisClient.hSet('password', request.body.userName, hashedTextPassword); 
+    response.status(200);
+    response.send({result:"Saved"});
+
+
+
+}
+
+
 app.get('/', (request, reponse)=>{
     response.send("Hello");
 })
+
+
+
+app.prependOnceListener('/signup', savePassword);
 
 app.post('/login' ,validatePassword);
