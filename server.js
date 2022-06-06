@@ -24,8 +24,8 @@ app.use(bodyparser.json());//use the middleware (call it before anything else ha
 
 https.createServer({
 
-    key fs.readFileSync('server.key'),
-    cert fs.readFileSync('server.cert'),
+    key:fs.readFileSync('server.key'),
+    cert:fs.readFileSync('server.cert'),
     passphrase: 'p@ssw0rd'
 })
 
