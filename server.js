@@ -8,26 +8,13 @@ const md5 = require ('md5');
 const bodyparser = require('body-parser'); //body parser is called to middleware
 const {createClient} = require ('redis');
 const { response } = require('express');
-const redisClient = createClient(
-    {
-        socket:{
-            port:6379,
-            host:"127.0.0.1"
-        },
 
-
-    }
-
-);//this creates a connetion to the redis database
+//this creates a connetion to the redis database
+const redisClient = createClient({ url: 'redis://default@ola-redis.cit270.com:6379'})
 
 app.use(bodyparser.json());//use the middleware (call it before anything else happen on this request)
 
-https.createServer({
 
-    key:fs.readFileSync('server.key'),
-    cert:fs.readFileSync('server.cert'),
-    passphrase: 'p@ssw0rd'
-})
 
 
 
@@ -69,3 +56,14 @@ app.get('/', (request, reponse)=>{
 app.prependOnceListener('/signup', savePassword);
 
 app.post('/login' ,validatePassword);
+
+app.post('/signup', savePassword);
+
+https.createServer({
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert'),
+    passphrase: 'P@ssw0rd'
+}, app).listen(port, async() => {
+    console.log('Listening.....')
+    await redisClient.connect();
+})
